@@ -19,7 +19,8 @@ import de.payleven.inappsdk.listeners.SetPaymentInstrumentsOrderListener;
  */
 public class PaylevenWrapper {
 
-    public static final String API_KEY = BuildConfig.PAYLEVEN_API_KEY;
+//    public static final String API_KEY = BuildConfig.PAYLEVEN_API_KEY;
+    public static final String API_KEY = "55b501b74bce4d0ca51df8b70c2ae38a";
 
     private static final String SHARED_PREFERENCES_FILE =
             "de.payleven.inappdemo.SHARED_PREFERENCES_FILE";
