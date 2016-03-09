@@ -96,14 +96,13 @@ public class PayListAdapter extends ArrayAdapter<PaymentInstrument> {
 	}
 
 	private void setupItem(ViewHolder holder, final PaymentInstrument paymentInstrument) {
-        setupPaymentInstrumentView(holder.pan, holder.expiryDate, paymentInstrument);
+        setupPaymentInstrumentView(holder.pan, paymentInstrument);
 
         int textColor = android.R.color.black;
         if (PaymentInstrument.Status.INVALID == paymentInstrument.getStatus()) {
             textColor = android.R.color.darker_gray;
         }
 
-        holder.expiryDate.setTextColor(context.getResources().getColor(textColor));
         holder.pan.setTextColor(context.getResources().getColor(textColor));
 
         int blockedVisibility = paymentInstrument.isBlocked() ? View.VISIBLE : View.GONE;
@@ -125,18 +124,15 @@ public class PayListAdapter extends ArrayAdapter<PaymentInstrument> {
      */
     private void setupPaymentInstrumentView(
             TextView pan,
-            TextView expiryDate,
             final PaymentInstrument paymentInstrument) {
         switch (paymentInstrument.getPaymentInstrumentType()) {
             case CC:
                 final CreditCardPaymentInstrument creditCardPaymentInstrument =
                         (CreditCardPaymentInstrument) paymentInstrument;
-                pan.setText(creditCardPaymentInstrument.getBrand() + " " +
-                		creditCardPaymentInstrument.getPanMasked());
-                final String date = creditCardPaymentInstrument.getExpiryMonth()
-                        + "/" + creditCardPaymentInstrument.getExpiryYear();
-                expiryDate.setText(date + " " + 
-                        creditCardPaymentInstrument.getPaymentInstrumentIdentifier());
+                pan.setText(String.format("XXXX-%s %s/%s", 
+                		creditCardPaymentInstrument.getPanTruncated(),
+                		creditCardPaymentInstrument.getExpiryMonth(),
+                		creditCardPaymentInstrument.getExpiryYear()));
         }
     }
 
@@ -152,19 +148,16 @@ public class PayListAdapter extends ArrayAdapter<PaymentInstrument> {
 
     private static class ViewHolder {
         TextView pan;
-        TextView expiryDate;
         TextView blocked;
-        Button usePaymentInstrument;
-        Button removePaymentInstrument;
+        View usePaymentInstrument;
+        View removePaymentInstrument;
 
         private ViewHolder(View itemView) {
-            expiryDate = (TextView) itemView.findViewById(
-                    R.id.expiry_date);
             pan = (TextView) itemView.findViewById(R.id.pan);
             blocked = (TextView) itemView.findViewById(R.id.blocked);
-            usePaymentInstrument = (Button) itemView.findViewById(
+            usePaymentInstrument = (View) itemView.findViewById(
                     R.id.use_payment_instrument);
-            removePaymentInstrument = (Button) itemView.findViewById(
+            removePaymentInstrument = (View) itemView.findViewById(
                     R.id.remove_payment_instrument);
         }
     }
