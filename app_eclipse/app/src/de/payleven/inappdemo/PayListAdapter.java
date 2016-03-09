@@ -131,10 +131,12 @@ public class PayListAdapter extends ArrayAdapter<PaymentInstrument> {
             case CC:
                 final CreditCardPaymentInstrument creditCardPaymentInstrument =
                         (CreditCardPaymentInstrument) paymentInstrument;
-                pan.setText(creditCardPaymentInstrument.getPanMasked());
+                pan.setText(creditCardPaymentInstrument.getBrand() + " " +
+                		creditCardPaymentInstrument.getPanMasked());
                 final String date = creditCardPaymentInstrument.getExpiryMonth()
                         + "/" + creditCardPaymentInstrument.getExpiryYear();
-                expiryDate.setText(date);
+                expiryDate.setText(date + " " + 
+                        creditCardPaymentInstrument.getPaymentInstrumentIdentifier());
         }
     }
 

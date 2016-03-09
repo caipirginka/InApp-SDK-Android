@@ -64,6 +64,10 @@ public class PaylevenWrapper {
         editor.commit();
     }
 
+    public boolean hasUserToken() {
+    	return getUserToken() != null;
+    }
+    
     private String getUserToken() {
         if (null != email) {
             return getUserTokenFromSharedPreferences(email);

@@ -106,10 +106,12 @@ public class PayActivity extends ToplevelActivity implements
     }
     
     private void getPaymentInstruments() {
+    	boolean hasUserToken = paylevenWrapper.hasUserToken();
         paymentInstruments.clear();
         for (int i = 0; i < 4; i++) {
             paymentInstruments.add(null);
-        	getPaymentInstruments(i);
+            if(hasUserToken)
+            	getPaymentInstruments(i);			//do it only if userToken is present
         }
         
         updateListView();
@@ -153,9 +155,9 @@ public class PayActivity extends ToplevelActivity implements
                 PayActivity.this,
                 PayActivity.this);
         paymentInstrumentsListView.setAdapter(listAdapter);
-        if (paymentInstruments.size() == 0) {
-            emptyListTextView.setText(getString(R.string.no_pi));
-        }
+//        if (paymentInstruments.size() == 0) {
+//            emptyListTextView.setText(getString(R.string.no_pi));
+//        }
     }
 
     @Override
