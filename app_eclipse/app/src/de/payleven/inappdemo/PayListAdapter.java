@@ -1,20 +1,16 @@
 package de.payleven.inappdemo;
 
+import java.util.List;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.List;
-
 import de.payleven.inappsdk.CreditCardPaymentInstrument;
 import de.payleven.inappsdk.PaymentInstrument;
-import de.payleven.inappsdk.PaymentInstrumentAction;
 
 /**
  * Adapter for the list of payment instruments

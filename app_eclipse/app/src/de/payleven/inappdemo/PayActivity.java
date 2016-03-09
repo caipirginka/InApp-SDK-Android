@@ -1,30 +1,23 @@
 package de.payleven.inappdemo;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import de.payleven.inappsdk.PaylevenFactory;
 import de.payleven.inappsdk.PaylevenInAppClient;
 import de.payleven.inappsdk.PaymentInstrument;
-import de.payleven.inappsdk.PaymentInstrumentAction;
 import de.payleven.inappsdk.errors.CallbackError;
-import de.payleven.inappsdk.listeners.EditPaymentInstrumentListener;
 import de.payleven.inappsdk.listeners.GetPaymentInstrumentsListener;
 import de.payleven.inappsdk.listeners.RemovePaymentInstrumentListener;
-import de.payleven.inappsdk.listeners.SetPaymentInstrumentsOrderListener;
 
 /**
  * Activity used to request and display the list of payment instruments for the active user

@@ -14,7 +14,8 @@
 
         <activity
             android:name=".PayActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,19 +26,6 @@
         <activity android:name=".AddCreditCardActivity">            
         </activity>
         
-        <activity android:name=".LoginActivity">
-        </activity>
-
-        <activity android:name=".MainActivity">
-        </activity>
-        
-        <activity android:name=".CreditCardActivity">            
-        </activity>
-        
-        <activity android:name=".PaymentInstrumentsActivity"
-                  android:windowSoftInputMode="adjustPan">
-        </activity>
-
         <service
             android:name="de.payleven.inappsdk.PaylevenCommunicationService"
             android:exported="false"
