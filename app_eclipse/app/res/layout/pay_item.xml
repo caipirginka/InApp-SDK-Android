@@ -29,59 +29,15 @@
             android:text="12/2016"
             android:textColor="@android:color/black"/>
 
-        <ImageView
-            android:id="@+id/move_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_vertical_margin_half"
-            android:layout_marginRight="@dimen/activity_vertical_margin_half"
-            android:layout_toLeftOf="@+id/move_down"
-            android:src="@drawable/arrow_up"/>
-
-        <ImageView
-            android:id="@id/move_down"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="@dimen/activity_vertical_margin_half"
-            android:layout_marginRight="@dimen/activity_vertical_margin_half"
-            android:rotation="180"
-            android:src="@drawable/arrow_up"/>
-
         <TextView
             android:id="@+id/blocked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/move_down"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="BLOCKED"
-            android:textColor="@android:color/holo_red_dark"/>
+            android:textColor="@android:color/holo_red_dark" />
 
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin">
-
-        <EditText
-            android:id="@+id/cvv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="@string/cvv_hint"
-            android:layout_marginRight="@dimen/activity_vertical_margin"
-            android:layout_toLeftOf="@+id/validate"/>
-
-        <Button
-            android:id="@+id/validate"
-            style="@style/second_level_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="@string/pi_validate"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -91,15 +47,16 @@
         android:weightSum="2">
 
         <Button
-            android:id="@+id/disable_payment_instrument"
+            android:id="@+id/use_payment_instrument"
             style="@style/second_level_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin_half"
-            android:layout_marginRight="@dimen/activity_vertical_margin_half"
+            android:layout_marginLeft="@dimen/activity_vertical_margin_half"
+            android:layout_marginStart="@dimen/activity_vertical_margin_half"
             android:layout_weight="1"
-            android:text="@string/pi_disable"/>
-
+            android:text="@string/pi_use"/>
+        
         <Button
             android:id="@+id/remove_payment_instrument"
             style="@style/second_level_button"
@@ -107,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin_half"
             android:layout_marginLeft="@dimen/activity_vertical_margin_half"
+            android:layout_marginStart="@dimen/activity_vertical_margin_half"
             android:layout_weight="1"
             android:text="@string/pi_remove"/>
     </LinearLayout>

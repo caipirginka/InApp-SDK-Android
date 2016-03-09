@@ -45,4 +45,7 @@
     <string name="pi_validate">Validate</string>
 
     <string name="processing">Processing</string>
+    
+    <string name="pi_add">Add new Credit Card</string>    
+    <string name="pi_use">Use</string>    
 </resources>

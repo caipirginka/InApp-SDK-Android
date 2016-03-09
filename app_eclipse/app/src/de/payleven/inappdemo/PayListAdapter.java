@@ -21,6 +21,10 @@ import de.payleven.inappsdk.PaymentInstrumentAction;
  */
 public class PayListAdapter extends ArrayAdapter<PaymentInstrument> {
 
+    public interface AddPaymentInstrumentButtonListener {
+        void addPaymentInstrument(int index);
+    }
+
     public interface RemovePaymentInstrumentButtonListener {
         void removePaymentInstrument(final PaymentInstrument paymentInstrument);
     }
@@ -28,6 +32,7 @@ public class PayListAdapter extends ArrayAdapter<PaymentInstrument> {
     private LayoutInflater inflater;
     private Context context;
 
+    private AddPaymentInstrumentButtonListener addPaymentInstrumentButtonListener;
     private RemovePaymentInstrumentButtonListener removePaymentInstrumentButtonListener;
 
     private List<PaymentInstrument> objects;
@@ -35,28 +40,62 @@ public class PayListAdapter extends ArrayAdapter<PaymentInstrument> {
     public PayListAdapter(
             Context context,
             List<PaymentInstrument> objects,
+            AddPaymentInstrumentButtonListener addPaymentInstrumentButtonListener,
             RemovePaymentInstrumentButtonListener removePaymentInstrumentButtonListener) {
 
         super(context, R.layout.pay_item, objects);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
+        this.addPaymentInstrumentButtonListener = addPaymentInstrumentButtonListener;
         this.removePaymentInstrumentButtonListener = removePaymentInstrumentButtonListener;
         this.objects = objects;
     }
 
 
     @Override
+    public int getViewTypeCount() {
+    	return 2;
+    }
+    
+    @Override
+    public int getItemViewType(int position) {
+    	return getItem(position) == null ? 0 : 1;
+    }
+    
+    @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
+    	int type = getItemViewType(position);
+    	
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.pay_item, parent, false);
-            ViewHolder holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
+    		if(type == 0) {
+                convertView = inflater.inflate(R.layout.pay_empty_item, parent, false);
+                convertView.setTag(new ViewEmptyHolder(convertView));
+    		} else {
+                convertView = inflater.inflate(R.layout.pay_item, parent, false);
+                convertView.setTag(new ViewHolder(convertView));
+    		}
         }
 
-        final ViewHolder holder = (ViewHolder) convertView.getTag();
         final PaymentInstrument paymentInstrument = getItem(position);
 
+        if(paymentInstrument == null)
+        	setupEmptyItem(position, (ViewEmptyHolder) convertView.getTag());
+        else
+        	setupItem((ViewHolder) convertView.getTag(),paymentInstrument);
+        	
+        return convertView;
+    }
+
+    private void setupEmptyItem(final int index, ViewEmptyHolder holder) {
+        holder.addPaymentInstrument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPaymentInstrumentButtonListener.addPaymentInstrument(index);
+            }
+        });
+	}
+
+	private void setupItem(ViewHolder holder, final PaymentInstrument paymentInstrument) {
         setupPaymentInstrumentView(holder.pan, holder.expiryDate, paymentInstrument);
 
         int textColor = android.R.color.black;
@@ -76,11 +115,9 @@ public class PayListAdapter extends ArrayAdapter<PaymentInstrument> {
                 removePaymentInstrumentButtonListener.removePaymentInstrument(paymentInstrument);
             }
         });
+	}
 
-        return convertView;
-    }
-
-    /**
+	/**
      * Construct a description for a payment instrument based on the type of the payment instrument
      *
      * @param paymentInstrument
@@ -102,10 +139,20 @@ public class PayListAdapter extends ArrayAdapter<PaymentInstrument> {
     }
 
 
+    private static class ViewEmptyHolder {
+        Button addPaymentInstrument;
+
+        private ViewEmptyHolder(View itemView) {
+            addPaymentInstrument = (Button) itemView.findViewById(
+                    R.id.add_payment_instrument);
+        }
+    }
+
     private static class ViewHolder {
         TextView pan;
         TextView expiryDate;
         TextView blocked;
+        Button usePaymentInstrument;
         Button removePaymentInstrument;
 
         private ViewHolder(View itemView) {
@@ -113,6 +160,8 @@ public class PayListAdapter extends ArrayAdapter<PaymentInstrument> {
                     R.id.expiry_date);
             pan = (TextView) itemView.findViewById(R.id.pan);
             blocked = (TextView) itemView.findViewById(R.id.blocked);
+            usePaymentInstrument = (Button) itemView.findViewById(
+                    R.id.use_payment_instrument);
             removePaymentInstrument = (Button) itemView.findViewById(
                     R.id.remove_payment_instrument);
         }

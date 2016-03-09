@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -30,12 +31,11 @@ import de.payleven.inappsdk.listeners.SetPaymentInstrumentsOrderListener;
  * depending on the use case
  */
 public class PayActivity extends ToplevelActivity implements
+		PayListAdapter.AddPaymentInstrumentButtonListener,
         PayListAdapter.RemovePaymentInstrumentButtonListener {
 
     private ListView paymentInstrumentsListView;
     private TextView emptyListTextView;
-    private ProgressDialogFragment progressDialogFragment;
-    private EditText useCaseEditText;
 
     private PayListAdapter listAdapter;
 
@@ -53,7 +53,10 @@ public class PayActivity extends ToplevelActivity implements
         setContentView(R.layout.activity_pay);
         paylevenWrapper = PaylevenWrapper.getInstance();
         paymentInstruments = new ArrayList<PaymentInstrument>();
-        initUI();
+        
+        paymentInstrumentsListView = (ListView) findViewById(R.id.payment_instruments);
+        emptyListTextView = (TextView) findViewById(R.id.empty);
+        paymentInstrumentsListView.setEmptyView(emptyListTextView);
         
         emailEditText = (EditText) findViewById(R.id.email_edittext);
         
@@ -69,6 +72,7 @@ public class PayActivity extends ToplevelActivity implements
                         }else {
                             registerWithPaylevenClient();
                             paylevenWrapper.setEmail(email);
+                            getPaymentInstruments();
                         }
                     }
                 });        
@@ -101,32 +105,26 @@ public class PayActivity extends ToplevelActivity implements
 
     }
     
-    private void initUI() {
-        paymentInstrumentsListView = (ListView) findViewById(R.id.payment_instruments);
-        emptyListTextView = (TextView) findViewById(R.id.empty);
-        paymentInstrumentsListView.setEmptyView(emptyListTextView);
-        useCaseEditText = (EditText) findViewById(R.id.use_case_edittext);
-
-        final Button getPaymentInstruments = (Button) findViewById(R.id.get_PI_button);
-        getPaymentInstruments.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getPaymentInstruments();
-            }
-        });
-    }
-
     private void getPaymentInstruments() {
+        paymentInstruments.clear();
+        for (int i = 0; i < 4; i++) {
+            paymentInstruments.add(null);
+        	getPaymentInstruments(i);
+        }
+        
+        updateListView();
+    }
+    
+    private void getPaymentInstruments(final int index) {
         showProgressDialog();
-
-        String useCase = useCaseEditText.getText().toString();
-
-        paylevenWrapper.getPaymentInstruments(useCase, new GetPaymentInstrumentsListener() {
+        paylevenWrapper.getPaymentInstruments(String.valueOf(index), new GetPaymentInstrumentsListener() {
             @Override
             public void onPaymentInstrumentsRetrieved(List<PaymentInstrument> paymentInstruments) {
-                dismissProgressDialog();
-                PayActivity.this.paymentInstruments = paymentInstruments;
-                updateListView();
+        		dismissProgressDialog();                	
+        		if(paymentInstruments.size() > 0) {
+	                PayActivity.this.paymentInstruments.set(index, paymentInstruments.get(0));
+	                updateListView();
+        		}
             }
 
             @Override
@@ -147,11 +145,12 @@ public class PayActivity extends ToplevelActivity implements
             }
         });
     }
-
+    
     private void updateListView() {
         listAdapter = new PayListAdapter(
                 PayActivity.this,
                 paymentInstruments,
+                PayActivity.this,
                 PayActivity.this);
         paymentInstrumentsListView.setAdapter(listAdapter);
         if (paymentInstruments.size() == 0) {
@@ -159,7 +158,20 @@ public class PayActivity extends ToplevelActivity implements
         }
     }
 
-
+    @Override
+    public void addPaymentInstrument(int index) {
+        Intent intent = new Intent(PayActivity.this, AddCreditCardActivity.class);
+        intent.putExtra(AddCreditCardActivity.EXTRA_USECASE, String.valueOf(index));
+        startActivityForResult(intent, 0);
+    }
+    
+    @Override
+    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
+    	super.onActivityResult(arg0, arg1, arg2);
+    	
+        getPaymentInstruments();
+    }
+    
     @Override
     public void removePaymentInstrument(final PaymentInstrument paymentInstrument) {
         showProgressDialog();

@@ -22,17 +22,20 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".AddCreditCardActivity">            
+        </activity>
+        
         <activity android:name=".LoginActivity">
         </activity>
 
         <activity android:name=".MainActivity">
-
         </activity>
-        <activity android:name=".CreditCardActivity">
+        
+        <activity android:name=".CreditCardActivity">            
         </activity>
+        
         <activity android:name=".PaymentInstrumentsActivity"
                   android:windowSoftInputMode="adjustPan">
-
         </activity>
 
         <service
